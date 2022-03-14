@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 11:13:31 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/14 13:02:53 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/14 14:33:32 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "../../ft_printf/headers/ft_printf.h"
 
 int	main(void)
 {
 	pid_t	server_pid;	
-	char	*msg;
 
 	server_pid = getpid();
-	msg = "server process ID: ";
-	printf("%s %d\n", msg, server_pid);
+	ft_printf("Server PID: %d\n", server_pid);
 	return (EXIT_SUCCESS);
 }
