@@ -6,12 +6,12 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 14:40:49 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/14 16:33:15 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/15 14:49:59 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#ifndef ERRORS_H
+# define ERRORS_H
 
 # define KDEF  "\x1B[0m"
 # define KRED  "\x1B[31m"

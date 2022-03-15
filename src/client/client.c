@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/14 17:26:56 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/15 15:29:07 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,19 @@ int	parse_cla(int argc, char *argv[], t_arg *arg, int *error_code)
 
 int	main(int argc, char *argv[])
 {
-	t_arg	arg;
-	bool	is_valid_cla;
-	int		error_code;
+	(void) argc;
+	(void) argv;
+	// t_arg	arg;
+	// bool	is_valid_cla;
+	// int		error_code;
 
-	is_valid_cla = parse_cla(argc, argv, &arg, &error_code);
-	if (!is_valid_cla)
-		return (display_client_error(error_code));
-	ft_printf("pid: %d\n", arg.pid);
-	ft_printf("msg: %s\n", arg.msg);
+	// is_valid_cla = parse_cla(argc, argv, &arg, &error_code);
+	// if (!is_valid_cla)
+	// 	return (display_client_error(error_code));
+	// kill(arg.pid, SIGINT);
+	// ft_printf("pid: %d\n", arg.pid);
+	// ft_printf("msg: %s\n", arg.msg);
+	unsigned int a = 0b1000001;
+	ft_printf("bin: %c\n", a);
 	return (EXIT_SUCCESS);
 }
