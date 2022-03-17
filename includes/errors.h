@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 14:40:49 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/15 14:49:59 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/17 11:29:48 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@
 # define INVALID_PID 3
 # define INVALID_MSG 4
 
-int	display_client_error(int error_code);
+int	throw_error(int error_code);
 
 #endif

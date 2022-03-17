@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 14:36:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/14 17:32:56 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/17 11:32:48 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <errors.h>
 
-int	display_client_error(int error_code)
+int	throw_error(int error_code)
 {
 	ft_printf("\n%s[!]	ERROR - INVALID INPUT: ", KRED);
 	if (error_code == TOO_FEW_CLA)
@@ -28,5 +28,5 @@ int	display_client_error(int error_code)
 	else
 		ft_printf("Unknown error%s\n", KDEF);
 	ft_printf("%s[?]	usage: ./client <PID> <message-to-server>\n\n", KYEL);
-	return (EXIT_FAILURE);
+	exit (EXIT_FAILURE);
 }

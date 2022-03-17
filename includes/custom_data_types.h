@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 13:09:10 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/14 17:28:31 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/17 11:58:10 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 # define CUSTOM_DATA_TYPES_H
 # include <sys/types.h>
 
-typedef struct s_arg
+typedef struct s_data
 {
-	pid_t	pid;
+	pid_t	server_pid;
 	char	*msg;
-}				t_arg;
+}				t_data;
 
 #endif

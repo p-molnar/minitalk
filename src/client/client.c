@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/15 15:29:07 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/17 14:40:44 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,48 +21,58 @@
 #include <utils.h>
 #include "../../ft_printf/headers/ft_printf.h"
 
-int	parse_cla(int argc, char *argv[], t_arg *arg, int *error_code)
+void	parse_cla(int argc, char *argv[], t_data *data)
 {
 	if (argc < 3)
-	{
-		*error_code = TOO_FEW_CLA;
-		return (false);
-	}
+		throw_error(TOO_FEW_CLA);
 	else if (argc > 3)
+		throw_error(TOO_MANY_CLA);
+	data->server_pid = atoi(argv[1]);
+	if (data->server_pid < 0)
+		throw_error(INVALID_PID);
+	data->msg = argv[2];
+	if (*(data->msg) == '\0')
+		throw_error(INVALID_MSG);
+}
+
+void	post_msg_to_server(t_data *data)
+{
+	char			*msg;
+	pid_t			pid;
+	size_t			i;
+	unsigned int	bit_char;
+	
+	msg = data->msg;
+	pid = data->server_pid;
+	while (*msg)
 	{
-		*error_code = TOO_MANY_CLA;
-		return (false);
+		i = 0;
+		bit_char = *msg;
+		while (i < 8)
+		{
+			if (bit_char & 128)
+			{
+				kill (pid, SIGUSR1);
+				printf("1\n");
+			}
+			else
+			{
+				kill (pid, SIGUSR2);
+				printf("0\n");
+			}
+			bit_char = bit_char << 1;
+			i++;
+		}
+		printf("\n");
+		msg++;
 	}
-	arg->pid = atoi(argv[1]);
-	if (arg->pid < 0)
-	{
-		*error_code = INVALID_PID;
-		return (false);
-	}
-	arg->msg = argv[2];
-	if (*(arg->msg) == '\0')
-	{
-		*error_code = INVALID_MSG;
-		return (false);
-	}
-	return (true);
 }
 
 int	main(int argc, char *argv[])
 {
-	(void) argc;
-	(void) argv;
-	// t_arg	arg;
-	// bool	is_valid_cla;
-	// int		error_code;
+	t_data	data;
 
-	// is_valid_cla = parse_cla(argc, argv, &arg, &error_code);
-	// if (!is_valid_cla)
-	// 	return (display_client_error(error_code));
-	// kill(arg.pid, SIGINT);
-	// ft_printf("pid: %d\n", arg.pid);
-	// ft_printf("msg: %s\n", arg.msg);
-	unsigned int a = 0b1000001;
-	ft_printf("bin: %c\n", a);
+	parse_cla(argc, argv, &data);
+	post_msg_to_server(&data);
 	return (EXIT_SUCCESS);
 }
