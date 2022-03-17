@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/17 14:40:44 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/17 19:31:31 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	post_msg_to_server(t_data *data)
 		bit_char = *msg;
 		while (i < 8)
 		{
-			if (bit_char & 128)
+			if (bit_char & 1)
 			{
 				kill (pid, SIGUSR1);
 				printf("1\n");
@@ -60,7 +60,8 @@ void	post_msg_to_server(t_data *data)
 				kill (pid, SIGUSR2);
 				printf("0\n");
 			}
-			bit_char = bit_char << 1;
+			bit_char = bit_char >> 1;
+			sleep(1);
 			i++;
 		}
 		printf("\n");
