@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/17 23:26:12 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/19 19:55:06 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 #include <errors.h>
 #include <utils.h>
 #include "../../ft_printf/headers/ft_printf.h"
+#include <string.h>
+
+#define STATUS_BAR_WIDTH 30
 
 void	parse_cla(int argc, char *argv[], t_data *data)
 {
@@ -33,6 +36,26 @@ void	parse_cla(int argc, char *argv[], t_data *data)
 	data->msg = argv[2];
 	if (*(data->msg) == '\0')
 		throw_error(INVALID_MSG);
+}
+
+void	print_status(t_data *data, char *msg)
+{
+	size_t 			total;
+	long			finished;
+	size_t			i;
+
+	total = strlen(data->msg);
+	finished = msg - data->msg;
+	// system("clear");
+	printf("%s[i]	transmission status:%s\n", KYEL, KDEF);
+	printf("message_sent: ");
+	printf("[");
+	i = 0;
+	while (i++ < (float) finished / total * STATUS_BAR_WIDTH)
+		printf("#");
+	while (i++ <= STATUS_BAR_WIDTH)
+		printf(" ");
+	printf("] %d%%\n", (int)(100.0 * finished / total));
 }
 
 void	post_msg_to_server(t_data *data)
@@ -52,20 +75,21 @@ void	post_msg_to_server(t_data *data)
 		{
 			if (bit_char & 1)
 			{
-				printf("1\n");
-				kill (pid, SIGUSR1);
+				// printf("1");
+				if (kill (pid, SIGUSR1))
+					throw_error(SIGNAL_ERR);
 			}
 			else
 			{
-				printf("0\n");
+				// printf("0");
 				kill (pid, SIGUSR2);
 			}
 			bit_char = bit_char >> 1;
-			usleep(25000);
+			usleep(100);
 			i++;
 		}
-		printf("\n");
 		msg++;
+		// print_status(data, msg);
 	}
 }
 

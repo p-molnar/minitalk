@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 14:40:49 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/17 11:29:48 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/19 16:29:40 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define TOO_MANY_CLA 2
 # define INVALID_PID 3
 # define INVALID_MSG 4
+# define SIGNAL_ERR 5
 
 int	throw_error(int error_code);
 

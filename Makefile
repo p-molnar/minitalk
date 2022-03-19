@@ -4,7 +4,7 @@ INCLUDES	=	includes
 FT_PRINTF	=	ft_printf/libftprintf.a
 
 CC			= 	gcc
-# CFLAGS		= 	-Wall -Werror -Wextra
+CFLAGS		= 	-Wall -Werror -Wextra
 
 CLIENT_SRC	=	client.c		\
 				errors.c		\

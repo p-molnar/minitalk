@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 11:13:31 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/17 23:44:38 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/19 20:00:11 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_var	var;
 
 void	dislpay_server_info(pid_t pid)
 {
-	ft_printf("%sServer started\n%s", KGRN, KDEF);
+	ft_printf("Server started\n");
 	ft_printf("Server PID: %d\n", pid);
 }
 
@@ -34,55 +34,47 @@ void	set_bit(int pos)
 	
 	mask = 1 << pos;
 	var.bite = var.bite | mask;
-	if (++var.bit_count == 7)
+	// printf("set_bit %d\n", var.bite);
+}
+
+void	reset_vars(void)
+{
+	var.bit_count = 0;
+	var.bite = 0;
+}
+
+void	decode_signal(signum)
+{
+	if (signum == SIGUSR1)
 	{
-		printf("from set_bit\n");
-		printf("%c", var.bite);
-		var.bit_count = 0;
+		set_bit(var.bit_count);
+		// printf("0");
 	}
-}
-
-void	clear_bit(int pos)
-{
-	unsigned int	mask;
-
-	mask = 1 << pos;
-	var.bite = var.bite | ~mask;
-	if (++var.bit_count == 7)
+	// fflush(stdout);
+	if (var.bit_count++ == 7)
 	{
-		printf("from clear_bit\n");
-		printf("%c", var.bite);
-		var.bit_count = 0;
+		write(1, &var.bite, 1);
+		reset_vars();
 	}
-}
-
-void	decode_bin_0(int exit_code)
-{
-	(void) exit_code;
-	printf("0\n");
-	clear_bit(var.bit_count);
-}
-
-void	decode_bin_1(int exit_code)
-{
-	(void) exit_code;
-	printf("1\n");
-	set_bit(var.bit_count);
 }
 
 int	main(void)
 {
+	struct sigaction sa;
 	pid_t			server_pid;
 	
 	server_pid = getpid();
 	var.bite = 0;
 	var.bit_count = 0;
+	sa.sa_handler = decode_signal;
 	dislpay_server_info(server_pid);
-	signal(SIGUSR1, decode_bin_1);
-	signal(SIGUSR2, decode_bin_0);
+	if (sigaction(SIGUSR1, &sa, NULL))
+		return (EXIT_FAILURE);
+	if (sigaction(SIGUSR2, &sa, NULL))
+		return (EXIT_FAILURE);
 	while (1)
 	{
-		pause();
+		;
 	}
 	return (EXIT_SUCCESS);
 }
