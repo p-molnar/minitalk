@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 14:40:49 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/19 16:29:40 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/20 16:58:51 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define KMAG  "\x1B[35m"
 # define KCYN  "\x1B[36m"
 # define KWHT  "\x1B[37m"
+# define BWHT  "\x1B[47m"
 
 # define TOO_FEW_CLA 1
 # define TOO_MANY_CLA 2
@@ -28,6 +29,7 @@
 # define INVALID_MSG 4
 # define SIGNAL_ERR 5
 
-int	throw_error(int error_code);
+int		throw_error(int error_code);
+void	throw_warning(int error_code);
 
 #endif

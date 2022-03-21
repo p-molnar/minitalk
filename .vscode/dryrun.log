@@ -1,0 +1,17 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/pmolnar/Documents/codam/42cursus/minitalk'
+mkdir -p obj/server/
+gcc -Wall -Werror -Wextra -I includes -c src/server/server.c -o obj/server/server.o
+make libftprintf.a --directory=ft_printf
+gcc -Wall -Werror -Wextra obj/server/server.o ft_printf/libftprintf.a -o server
+echo "\033[0;32mserver was sucessfully made\n\033[0m"
+mkdir -p obj/client/
+gcc -Wall -Werror -Wextra -I includes -c src/client/client.c -o obj/client/client.o
+mkdir -p obj/client/
+gcc -Wall -Werror -Wextra -I includes -c src/client/errors.c -o obj/client/errors.o
+mkdir -p obj/client/
+gcc -Wall -Werror -Wextra -I includes -c src/client/ft_atoi.c -o obj/client/ft_atoi.o
+gcc -Wall -Werror -Wextra obj/client/client.o obj/client/errors.o obj/client/ft_atoi.o ft_printf/libftprintf.a -o client
+echo "\033[0;32mclient was sucessfully made\n\033[0m"
+make: Leaving directory `/Users/pmolnar/Documents/codam/42cursus/minitalk'
+ 
