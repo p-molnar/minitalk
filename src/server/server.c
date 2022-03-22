@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 11:13:31 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/21 17:59:19 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/22 23:12:01 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,50 +21,62 @@
 #include "../../ft_printf/headers/ft_printf.h"
 #include <math.h>
 
-t_srv_data	var;
-char arr[1000] = {0};
+t_srv_data	data;
 
 void	dislpay_server_info(pid_t srv_pid)
 {
-	ft_printf("%sServer started%s\n", KGRN, KDEF);
+	ft_printf("Server status: %sActive%s\n", KGRN, KDEF);
 	ft_printf("Server PID: %d\n", srv_pid);
-	fflush(stdout);
 }
 
-// void	set_bit(int pos)
-// {
-// 	unsigned char	mask;
-	
-// 	mask = 1 << pos;
-// 	var.bite = var.bite | mask;
-// }
+void	reset_vars(void)
+{
+	data.bite = 0;
+	data.msg_len = 0;
+	data.bit_count = 0;
+	data.is_msg_len_decoded = false;
+}
+
+void	decode_msg_len(int signum)
+{
+	static size_t	bit_count;
+	if (signum == SIGUSR1)
+		data.msg_len += pow(2, bit_count);
+	if (bit_count++ == 31)
+	{
+		data.is_msg_len_decoded = true;
+		bit_count = 0;
+		data.msg = malloc((data.msg_len + 1) * sizeof(unsigned char));
+		if (data.msg == NULL)
+			exit(1);
+	}
+}
 
 void	decode_signal(signum)
 {
-	static int i;
-	if (signum == SIGUSR1)
+	static size_t i;
+	if (!data.is_msg_len_decoded)
+		decode_msg_len(signum);
+	else
 	{
-		// write(1, "1", 1);
-		// var.bite += pow(2, var.bit_count);
-		var.msg_len += pow(2, var.bit_count);
-		// set_bit(var.bit_count);
+		if (signum == SIGUSR1)
+		{
+			data.bite += pow(2, data.bit_count);
+		}
+		if (data.bit_count++ == 7)
+		{
+			data.msg[i++] = data.bite;
+			data.bit_count = 0;
+			data.bite = 0;
+		}
+		if (i == data.msg_len)
+		{
+			write(1, data.msg, data.msg_len);
+			i = 0;
+			free(data.msg);
+			reset_vars();
+		}
 	}
-	else if (signum == SIGUSR2)
-	{
-		// write(1, "0", 1);
-	}
-	if (var.bit_count++ == 7)
-	{
-		// write(1, " ", 1);
-		write(1, &var.bite, 1);
-		// write(1, "\n", 1);
-		arr[i] = var.bite;
-		var.bite = 0b00000000;
-		var.bit_count = 0;
-		i++;
-	}
-	if (i == 449)
-		printf("%s", arr);
 }
 
 int	main(void)
@@ -72,14 +84,12 @@ int	main(void)
 	pid_t				srv_pid;
 	
 	srv_pid = getpid();
-	var.bite = 0b00000000;
-	var.bit_count = 0;
-	var.action.sa_handler = decode_signal;
-	sigemptyset(&var.action.sa_mask);
+	reset_vars();
+	data.action.sa_handler = decode_signal;
 	dislpay_server_info(srv_pid);
-	if (sigaction(SIGUSR1, &var.action, NULL))
+	if (sigaction(SIGUSR1, &data.action, NULL))
 		return (EXIT_FAILURE);
-	if (sigaction(SIGUSR2, &var.action, NULL))
+	if (sigaction(SIGUSR2, &data.action, NULL))
 		return (EXIT_FAILURE);
 	while (1)
 	{

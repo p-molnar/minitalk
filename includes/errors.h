@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 14:40:49 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/20 16:58:51 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/21 23:42:29 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define INVALID_PID 3
 # define INVALID_MSG 4
 # define SIGNAL_ERR 5
+# define MALLOC_FAIL 6
 
 int		throw_error(int error_code);
 void	throw_warning(int error_code);

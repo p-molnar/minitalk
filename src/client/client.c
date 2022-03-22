@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/21 17:46:33 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/22 23:38:10 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	print_status(t_clt_data *data, char *msg)
 
 	total = strlen(data->msg);
 	finished = msg - data->msg;
-	// system("clear");
+	system("clear");
 	ft_printf("%s[i]	transmission status:%s\n", KYEL, KDEF);
 	ft_printf("message_sent: ");
 	ft_printf("|");
@@ -76,7 +76,7 @@ void	set_bit(int pos, unsigned char *bite)
 	*bite = *bite | mask;
 }
 
-void	post_msg_len(t_clt_data *data, pid_t srv_pid);
+void	post_msg_len(t_clt_data *data, pid_t srv_pid)
 {
 	size_t	msg_len;
 	size_t	i;
@@ -87,15 +87,17 @@ void	post_msg_len(t_clt_data *data, pid_t srv_pid);
 	{
 		if (msg_len & 1)
 		{
-			kill(srv_pid, SIGUSR1);
+			if (kill(srv_pid, SIGUSR1))
+				throw_error(SIGNAL_ERR);
 		}
 		else
 		{
-			kill(srv_pid, SIGUSR2);
+			if (kill(srv_pid, SIGUSR2))
+				throw_error(SIGNAL_ERR);
 		}
 		msg_len = msg_len >> 1;
 		i++;
-		usleep(1000);
+		usleep(100);
 	}
 
 }
@@ -110,33 +112,25 @@ void	post_msg(t_clt_data *data, pid_t srv_pid)
 	while (*msg)
 	{
 		i = 0;
-		unsigned char bite = 0;
 		bit_char = *msg;
-		// printf("char %ld: ", msg - data->msg);
 		while (i < 8)
 		{
 			if (bit_char & 1)
 			{
-				write(1, "1", 1);
-				// set_bit(i, &bite);
 				if (kill (srv_pid, SIGUSR1))
 					throw_error(SIGNAL_ERR);
 			}
 			else
 			{
-				write(1, "0", 1);
 				if (kill (srv_pid, SIGUSR2))
 					throw_error(SIGNAL_ERR);
 			}
 			bit_char = bit_char >> 1;
-			usleep(150);
+			usleep(100);
 			i++;
 		}
-		write(1, " ", 1);
-		write(1, &bite, 1);
-		write(1, "\n", 1);
 		msg++;
-		// print_status(data, msg);
+		print_status(data, msg);
 	}
 }
 
@@ -146,6 +140,10 @@ int	main(int argc, char *argv[])
 	
 	parse_cla(argc, argv, &data);
 	post_msg_len(&data, data.srv_pid);
-	// post_msg(&data, data.srv_pid);
+	post_msg(&data, data.srv_pid);
+	if (sigaction(SIGUSR1), &data.action, NULL)
+		return (EXIT_FAILURE);
+	while (1)
+		pause();
 	return (EXIT_SUCCESS);
 }
