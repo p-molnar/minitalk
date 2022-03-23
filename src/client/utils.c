@@ -1,14 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_atoi.c                                          :+:    :+:            */
+/*   utils.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 16:23:55 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/14 17:15:59 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/23 09:59:10 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stddef.h>
 
 static int	ft_isdigit(int c)
 {
@@ -40,4 +42,14 @@ int	ft_atoi(const char *str)
 	while (*str && ft_isdigit(*str))
 		num = 10 * num + (*str++ - '0');
 	return (sign * num);
+}
+
+size_t	ft_strlen(const char *str)
+{
+	size_t	i;
+	
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }

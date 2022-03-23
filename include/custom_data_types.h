@@ -6,20 +6,27 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 13:09:10 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/22 23:38:34 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/23 11:42:15 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUSTOM_DATA_TYPES_H
 # define CUSTOM_DATA_TYPES_H
-# include <sys/types.h>
+
 # include <stdbool.h>
+# include <stddef.h>
+# include <signal.h>
+
+# define SLEEP_TIME 100
+# define STATUS_BAR_WIDTH 30
+
 typedef struct s_clt_data
 {
 	pid_t				srv_pid;
 	size_t				msg_len;
 	char				*msg;
-	struct sigaction	action;	
+	bool				is_msg_printed;
+	struct sigaction	action;
 }				t_clt_data;
 
 typedef struct s_srv_data
@@ -29,7 +36,8 @@ typedef struct s_srv_data
 	unsigned char		bite;
 	size_t				bit_count;
 	bool				is_msg_len_decoded;
-	struct sigaction	action;	
+	struct sigaction	action;
+	pid_t				clt_pid;
 }				t_srv_data;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 14:36:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/21 23:43:36 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/23 11:21:56 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,11 @@ int	throw_error(int error_code)
 	else if (error_code == INVALID_MSG)
 		ft_printf("Empty message - nothing to be sent%s\n", KDEF);
 	else if (error_code == SIGNAL_ERR)
-		ft_printf("Signal error\n");
+		ft_printf("Signal error%s\n", KDEF);
 	else if (error_code == MALLOC_FAIL)
 		ft_printf("Memory allocation failed%s\n", KDEF);
 	else
 		ft_printf("Unknown error%s\n", KDEF);
 	ft_printf("	usage: ./client <PID> <message-to-server>\n");
 	exit (EXIT_FAILURE);
-}
-
-void	throw_warning(int error_code)
-{
-	ft_printf("%s[!]	WARNING - QUESITONABLE INPUT: ", KYEL);
-	if (error_code == INVALID_MSG)
-		ft_printf("Message is empty, nothing to be sent to server%s\n", KDEF);
-	else
-		ft_printf("Unknown error%s\n", KDEF);
-	ft_printf("%s[hint]	usage: ./client <PID> <message-to-server>\n", KDEF);
 }

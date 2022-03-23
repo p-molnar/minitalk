@@ -1,33 +1,38 @@
 SERVER_NAME	=	server
 CLIENT_NAME	=	client
-INCLUDES	=	includes
+INCLUDES	=	include
 FT_PRINTF	=	ft_printf/libftprintf.a
 
 CC			= 	gcc
 CFLAGS		= 	-Wall -Werror -Wextra
 
-CLIENT_SRC	=	client.c		\
-				errors.c		\
-				ft_atoi.c
+GENERIC_SRC	=	utils.c				\
+				errors.c
+					
+CLIENT_SRC	=	client.c			\
+				utils.c				\
+				status.c			\
+				init.c 				\
 
 SERVER_SRC	=	server.c
 
 CLIENT_OBJ	=	$(addprefix obj/client/, $(CLIENT_SRC:.c=.o))
 SERVER_OBJ	=	$(addprefix obj/server/, $(SERVER_SRC:.c=.o))
+GENERIC_OBJ	=	$(addprefix obj/, $(GENERIC_SRC:.c=.o))
 
 RED		=	\033[0;31m
 GREEN	=	\033[0;32m
 YELLOW	=	\033[1;33m
 DEF		=	\033[0m
 
-all:	$(SERVER_NAME) $(CLIENT_NAME)
+all:	$(GENERIC_OBJ) $(SERVER_NAME) $(CLIENT_NAME)
 
 $(SERVER_NAME):	$(SERVER_OBJ) $(FT_PRINTF)
-	$(CC) $(CFLAGS) $(SERVER_OBJ) $(FT_PRINTF) -o $(SERVER_NAME)
+	$(CC) $(CFLAGS) $(SERVER_OBJ) $(GENERIC_OBJ) $(FT_PRINTF) -o $(SERVER_NAME)
 	@echo "$(GREEN)$(SERVER_NAME) was sucessfully made\n$(DEF)"
 
 $(CLIENT_NAME):	$(CLIENT_OBJ) $(FT_PRINTF)
-	$(CC) $(CFLAGS) $(CLIENT_OBJ) $(FT_PRINTF) -o $(CLIENT_NAME)
+	$(CC) $(CFLAGS) $(CLIENT_OBJ) $(GENERIC_OBJ) $(FT_PRINTF) -o $(CLIENT_NAME)
 	@echo "$(GREEN)$(CLIENT_NAME) was sucessfully made\n$(DEF)"
 
 obj/%.o: src/%.c

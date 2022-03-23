@@ -6,20 +6,21 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 11:13:31 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/22 23:12:01 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/23 11:33:12 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <math.h>
+
 #include <errors.h>
 #include <custom_data_types.h>
+#include <utils.h>
 #include "../../ft_printf/headers/ft_printf.h"
-#include <math.h>
 
 t_srv_data	data;
 
@@ -52,8 +53,9 @@ void	decode_msg_len(int signum)
 	}
 }
 
-void	decode_signal(signum)
+void	decode_signal(int signum, siginfo_t *info, void *ucontext)
 {
+	(void) ucontext;
 	static size_t i;
 	if (!data.is_msg_len_decoded)
 		decode_msg_len(signum);
@@ -68,6 +70,7 @@ void	decode_signal(signum)
 			data.msg[i++] = data.bite;
 			data.bit_count = 0;
 			data.bite = 0;
+			// send_signal(SIGUSR1, info->si_pid);
 		}
 		if (i == data.msg_len)
 		{
@@ -75,6 +78,7 @@ void	decode_signal(signum)
 			i = 0;
 			free(data.msg);
 			reset_vars();
+			send_signal(SIGUSR2, info->si_pid);
 		}
 	}
 }
@@ -84,8 +88,8 @@ int	main(void)
 	pid_t				srv_pid;
 	
 	srv_pid = getpid();
+	data.action.sa_sigaction = decode_signal;
 	reset_vars();
-	data.action.sa_handler = decode_signal;
 	dislpay_server_info(srv_pid);
 	if (sigaction(SIGUSR1, &data.action, NULL))
 		return (EXIT_FAILURE);
