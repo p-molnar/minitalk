@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/23 11:37:16 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/23 11:50:50 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/23 12:51:09 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,28 @@
 #include <errors.h>
 #include "../../ft_printf/headers/ft_printf.h"
 
-void	print_status(t_clt_data *data, char *msg)
+#include <stdio.h>
+
+static void	print_title(const char *title)
 {
-	size_t 			total;
-	long			finished;
+	ft_printf("%s[i]	%s:%s\n", KYEL, title, KDEF);
+	// ft_printf("%s: ", title);
+}
+
+void	print_status(size_t total, size_t completed, const char *title)
+{
+	static size_t	exec_count;
 	size_t			i;
 
-	total = ft_strlen(data->msg);
-	finished = msg - data->msg;
-	// system("clear");
-	ft_printf("%s[i]	transmission status:%s\n", KYEL, KDEF);
-	ft_printf("message_sent: ");
+	if (exec_count++ == 0)
+		print_title(title);
 	ft_printf("|");
 	i = 0;
-	while (i++ < (float) finished / total * STATUS_BAR_WIDTH)
+	while (i++ < (float) completed / total * STATUS_BAR_WIDTH)
 		ft_printf("%s %s", BWHT, KDEF);
 	while (i++ <= STATUS_BAR_WIDTH)
 		ft_printf("-");
-	ft_printf("|	%d%%\n", (int)(100.0 * finished / total));
+	ft_printf("|	%d%%\n", (int)(100.0 * completed / total));
+	printf("\33[2K\r");
+	fflush(stdout);
 }

@@ -13,6 +13,8 @@ CLIENT_SRC	=	client.c			\
 				utils.c				\
 				status.c			\
 				init.c 				\
+				ft_atoi.c			\
+
 
 SERVER_SRC	=	server.c
 

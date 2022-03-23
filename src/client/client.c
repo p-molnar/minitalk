@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/23 11:56:18 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/23 12:39:02 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,18 @@
 
 t_clt_data	data;
 
-void	parse_cla(int argc, char *argv[], t_clt_data *data)
+void	listen_to_delievered_signal(int signum)
 {
-	if (argc < 3)
-		throw_error(TOO_FEW_CLA);
-	else if (argc > 3)
-		throw_error(TOO_MANY_CLA);
-	data->srv_pid = atoi(argv[1]);
-	if (data->srv_pid < 0)
-		throw_error(INVALID_PID);
-	data->msg = argv[2];
-	if (*(data->msg) == '\0')
-		throw_error(INVALID_MSG);
-	data->msg_len = ft_strlen(data->msg);
-}
-
-void	set_bit(int pos, unsigned char *bite)
-{
-	unsigned char	mask;
-	
-	mask = 1 << pos;
-	*bite = *bite | mask;
+	// static size_t	delievered_char_count;	
+	if (signum == SIGUSR1)
+	{
+		data.is_msg_printed = true;
+	}
+	else if (signum == SIGUSR2)
+	{
+		ft_printf("message has been printed\n");
+		data.is_msg_printed = true;
+	}
 }
 
 void	post_msg_len(t_clt_data *data, pid_t srv_pid)
@@ -66,42 +57,43 @@ void	post_msg_len(t_clt_data *data, pid_t srv_pid)
 
 void	post_msg(t_clt_data *data, pid_t srv_pid)
 {
-	// char			*msg;
-	unsigned char	bit_char;
+	unsigned char	bite_char;
 	size_t			i;
+	size_t			j;
 	
-	// msg = data->msg;
-	while (*(data->msg))
+	i = 0;
+	while (data->msg[i])
 	{
-		i = 0;
-		bit_char = *(data->msg);
-		while (i < 8)
+		j = 0;
+		bite_char = data->msg[i];
+		while (j < 8)
 		{
-			if (bit_char & 1)
+			if (bite_char & 1)
 				send_signal(SIGUSR1, srv_pid);
 			else
 				send_signal(SIGUSR2, srv_pid);
-			bit_char = bit_char >> 1;
+			bite_char = bite_char >> 1;
+			j++;
 			usleep(SLEEP_TIME);
-			i++;
 		}
-		data->msg++;
-		// print_status(data, msg);
+		i++;
+		print_status(data->msg_len, i, "Message sent");
 	}
 }
 
-void	listen_to_delievered_signal(int signum)
+static void	parse_cla(int argc, char *argv[], t_clt_data *data)
 {
-	// static size_t	delievered_char_count;	
-	if (signum == SIGUSR1)
-	{
-		data.is_msg_printed = true;
-	}
-	else if (signum == SIGUSR2)
-	{
-		ft_printf("message has been printed\n");
-		data.is_msg_printed = true;
-	}
+	if (argc < 3)
+		throw_error(TOO_FEW_CLA);
+	else if (argc > 3)
+		throw_error(TOO_MANY_CLA);
+	data->srv_pid = atoi(argv[1]);
+	if (data->srv_pid < 0)
+		throw_error(INVALID_PID);
+	data->msg = argv[2];
+	if (*(data->msg) == '\0')
+		throw_error(INVALID_MSG);
+	data->msg_len = ft_strlen(data->msg);
 }
 
 int	main(int argc, char *argv[])

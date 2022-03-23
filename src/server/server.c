@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 11:13:31 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/23 11:33:12 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/23 12:41:55 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void	decode_signal(int signum, siginfo_t *info, void *ucontext)
 			i = 0;
 			free(data.msg);
 			reset_vars();
-			send_signal(SIGUSR2, info->si_pid);
+			(void) info;
+			// send_signal(SIGUSR2, info->si_pid);
 		}
 	}
 }
