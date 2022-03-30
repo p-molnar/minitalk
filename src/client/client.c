@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/24 22:24:19 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/30 09:38:00 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_clt_data	data;
 
 void	listen_to_delievered_signal(int signum)
 {
-	// static size_t	delievered_char_count;	
 	if (signum == SIGUSR1)
 	{
 		data.is_msg_printed = true;
@@ -60,7 +59,7 @@ void	post_msg(t_clt_data *data, pid_t srv_pid)
 	unsigned char	bite_char;
 	size_t			i;
 	size_t			j;
-	
+
 	i = 0;
 	while (data->msg[i])
 	{
@@ -77,7 +76,6 @@ void	post_msg(t_clt_data *data, pid_t srv_pid)
 			usleep(SLEEP_TIME);
 		}
 		i++;
-		print_status(data->msg_len, i, "Message sent");
 	}
 }
 
