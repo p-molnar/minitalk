@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.h                                            :+:    :+:            */
+/*   ft_printf.h                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/03/23 11:11:27 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/30 10:43:56 by pmolnar       ########   odam.nl         */
+/*   Created: 2022/01/14 23:39:11 by pmolnar       #+#    #+#                 */
+/*   Updated: 2022/03/30 10:56:34 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
-# include <signal.h>
-# include <custom_data_types.h>
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-int			ft_atoi(const char *str);
-size_t		ft_strlen(const char *str);
-long int	ft_pow(int base, int power);
-void		send_signal(int signum, pid_t pid);
-void		set_bit(int pos, unsigned char *bite);
+# include <stdarg.h>
+
+int		ft_printf(const char *format, ...);
 
 #endif

@@ -10,11 +10,7 @@ GENERIC_SRC	=	utils.c				\
 				errors.c
 					
 CLIENT_SRC	=	client.c			\
-				utils.c				\
-				status.c			\
-				init.c 				\
 				ft_atoi.c			\
-
 
 SERVER_SRC	=	server.c
 
@@ -56,4 +52,7 @@ fclean:	clean
 
 re:	fclean all
 
-.PHONY: all clean fclean re
+norm:
+	norminette src
+
+.PHONY: all clean fclean re norm

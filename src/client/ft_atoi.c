@@ -6,10 +6,9 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/23 12:03:38 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/23 12:03:39 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/30 10:53:13 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 static int	ft_isdigit(int c)
 {

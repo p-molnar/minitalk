@@ -6,41 +6,30 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/30 09:38:00 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/30 15:30:01 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-
-#include <custom_data_types.h>
-#include <errors.h>
-#include <utils.h>
-#include "../../ft_printf/headers/ft_printf.h"
 #include <minitalk.h>
 
-t_clt_data	data;
+t_clt_data	g_data;
 
-void	listen_to_delievered_signal(int signum)
+static void	listen_to_delivered_signal(int signum)
 {
 	if (signum == SIGUSR1)
 	{
-		data.is_msg_printed = true;
-	}
-	else if (signum == SIGUSR2)
-	{
-		data.is_msg_printed = true;
-		ft_printf("\nmessage has been printed\n");
+		g_data.is_msg_printed = true;
+		ft_printf("\n%sJob #%d - Successful delivery and printing%s\n", \
+		KGRN, g_data.clt_pid, KDEF);
 	}
 }
 
-void	post_msg_len(t_clt_data *data, pid_t srv_pid)
+static void	post_msg_len(t_clt_data *g_data, pid_t srv_pid)
 {
 	size_t	msg_len;
 	size_t	i;
 
-	msg_len = data->msg_len;
+	msg_len = g_data->msg_len;
 	i = 0;
 	while (i < 32)
 	{
@@ -54,18 +43,18 @@ void	post_msg_len(t_clt_data *data, pid_t srv_pid)
 	}
 }
 
-void	post_msg(t_clt_data *data, pid_t srv_pid)
+static void	post_msg(t_clt_data *g_data, pid_t srv_pid)
 {
 	unsigned char	bite_char;
 	size_t			i;
 	size_t			j;
 
 	i = 0;
-	while (data->msg[i])
+	while (g_data->msg[i])
 	{
 		j = 0;
-		bite_char = data->msg[i];
-		while (j < 8)
+		bite_char = g_data->msg[i];
+		while (j < CHAR_SIZE)
 		{
 			if (bite_char & 1)
 				send_signal(SIGUSR1, srv_pid);
@@ -79,31 +68,34 @@ void	post_msg(t_clt_data *data, pid_t srv_pid)
 	}
 }
 
-static void	parse_cla(int argc, char *argv[], t_clt_data *data)
+void	parse_cla(int argc, char *argv[], t_clt_data *g_data)
 {
 	if (argc < 3)
 		throw_error(TOO_FEW_CLA);
 	else if (argc > 3)
 		throw_error(TOO_MANY_CLA);
-	data->srv_pid = atoi(argv[1]);
-	if (data->srv_pid < 0)
+	g_data->srv_pid = atoi(argv[1]);
+	if (g_data->srv_pid < 0)
 		throw_error(INVALID_PID);
-	data->msg = argv[2];
-	if (*(data->msg) == '\0')
+	g_data->msg = argv[2];
+	if (*(g_data->msg) == '\0')
 		throw_error(INVALID_MSG);
-	data->msg_len = ft_strlen(data->msg);
+	g_data->msg_len = ft_strlen(g_data->msg);
 }
 
 int	main(int argc, char *argv[])
 {
-	parse_cla(argc, argv, &data);
-	init_vars(&data);
-	init_signal_listener(&data);
-	post_msg_len(&data, data.srv_pid);
-	post_msg(&data, data.srv_pid);
+	parse_cla(argc, argv, &g_data);
+	g_data.action.sa_handler = listen_to_delivered_signal;
+	if (sigaction(SIGUSR1, &g_data.action, NULL))
+		throw_error(SIGACTION_ERR);
+	g_data.is_msg_printed = false;
+	g_data.clt_pid = getpid();
+	post_msg_len(&g_data, g_data.srv_pid);
+	post_msg(&g_data, g_data.srv_pid);
 	while (1)
 	{
-		if (data.is_msg_printed)
+		if (g_data.is_msg_printed)
 			return (EXIT_SUCCESS);
 		pause();
 	}
