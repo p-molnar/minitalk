@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 13:09:10 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/23 12:45:57 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/24 22:16:57 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stddef.h>
 # include <signal.h>
 
-# define SLEEP_TIME 200
+# define SLEEP_TIME 100
 # define STATUS_BAR_WIDTH 20
 
 typedef struct s_clt_data

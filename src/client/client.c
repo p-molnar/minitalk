@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/23 12:39:02 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/24 22:24:19 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	listen_to_delievered_signal(int signum)
 	}
 	else if (signum == SIGUSR2)
 	{
-		ft_printf("message has been printed\n");
 		data.is_msg_printed = true;
+		ft_printf("\nmessage has been printed\n");
 	}
 }
 
