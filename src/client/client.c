@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 10:07:05 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/30 15:30:01 by pmolnar       ########   odam.nl         */
+/*   Updated: 2022/03/30 15:52:36 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ static void	listen_to_delivered_signal(int signum)
 {
 	if (signum == SIGUSR1)
 	{
-		g_data.is_msg_printed = true;
 		ft_printf("\n%sJob #%d - Successful delivery and printing%s\n", \
 		KGRN, g_data.clt_pid, KDEF);
+		g_data.is_msg_printed = true;
 	}
 }
 
