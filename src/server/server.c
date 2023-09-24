@@ -6,7 +6,7 @@
 /*   By: pmolnar <pmolnar@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/14 11:13:31 by pmolnar       #+#    #+#                 */
-/*   Updated: 2022/03/30 15:29:39 by pmolnar       ########   odam.nl         */
+/*   Updated: 2023/09/24 12:06:51 by pmolnar       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_srv_data	g_data;
 
-static void	dislpay_server_info(void)
+static void	display_server_info(void)
 {
 	ft_printf("Server status: %sActive%s\n", KGRN, KDEF);
 	ft_printf("Server PID: %d\n", g_data.srv_pid);
@@ -44,7 +44,7 @@ static void	decode_msg_len(int signum)
 	}
 }
 
-static void	decode_signal(int signum, siginfo_t *info, void *ucontext)
+static void	decode_msg(int signum, siginfo_t *info, void *ucontext)
 {
 	static size_t	i;
 
@@ -76,9 +76,9 @@ static void	decode_signal(int signum, siginfo_t *info, void *ucontext)
 int	main(void)
 {
 	g_data.srv_pid = getpid();
-	g_data.action.sa_sigaction = decode_signal;
+	g_data.action.sa_sigaction = decode_msg;
 	reset_vars();
-	dislpay_server_info();
+	display_server_info();
 	if (sigaction(SIGUSR1, &g_data.action, NULL))
 		throw_error(SIGACTION_ERR);
 	if (sigaction(SIGUSR2, &g_data.action, NULL))
