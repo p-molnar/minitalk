@@ -38,6 +38,7 @@ obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -I $(INCLUDES) -c $^ -o $@
 
 $(FT_PRINTF):
+	git submodule update --init --recursive
 	make libftprintf.a --directory=ft_printf
 
 clean:
