@@ -1,5 +1,3 @@
-Here's the corrected version of the README file:
-
 # Minitalk - Terminal-based Echo Server
 
 Welcome to Minitalk! This project reimplements an [Echo Server](https://medium.com/@himalee.tailor/what-is-an-echoserver-b2bfd3b8deeb) that allows communication between separate processes using Unix signals.
